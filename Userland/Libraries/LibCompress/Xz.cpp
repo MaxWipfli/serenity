@@ -303,12 +303,18 @@ ErrorOr<size_t> XzDecompressor::try_read(Bytes bytes)
             VERIFY(m_block_header.has_value());
 
             if (!m_block_state.has_value())
-                m_block_state.emplace(m_input_stream, TRY(create_block_checksum()));
+                m_block_state.emplace(m_input_stream, m_block_header->lzma_filter_properties, TRY(create_block_checksum()));
 
-            TODO();
-            // FIXME: Update the checksum with the bytes we actually read.
+            auto read_buffer = bytes.slice(total_read);
+            auto nread = m_block_state->lzma2_input_stream.read(read_buffer);
+            total_read += nread;
+            m_block_state->checksum->update(read_buffer.slice(0, nread));
 
-            m_state = State::AfterBlockData;
+            if (m_block_state->lzma2_input_stream.has_any_error())
+                return Error::from_string_literal("LZMA2 stream error."sv);
+
+            if (m_block_state->lzma2_input_stream.eof())
+                m_state = State::AfterBlockData;
         }
 
         if (m_state == State::AfterBlockData) {
@@ -380,8 +386,9 @@ ErrorOr<NonnullOwnPtr<BlockChecksum>> XzDecompressor::create_block_checksum() co
     }
 }
 
-XzDecompressor::BlockState::BlockState(InputStream& stream, NonnullOwnPtr<BlockChecksum> checksum)
+XzDecompressor::BlockState::BlockState(InputStream& stream, u8 lzma_properties_byte, NonnullOwnPtr<BlockChecksum> checksum)
     : counted_input_stream(CountedInputStream(stream))
+    , lzma2_input_stream(counted_input_stream, lzma_properties_byte)
     , checksum(move(checksum))
 {
 }

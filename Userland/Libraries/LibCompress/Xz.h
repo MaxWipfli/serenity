@@ -11,6 +11,7 @@
 #include <AK/OwnPtr.h>
 #include <AK/ProxiedStream.h>
 #include <AK/Stream.h>
+#include <LibCompress/LZMA/LZMA2InputStream.h>
 #include <LibCrypto/Checksum/CRC32.h>
 
 // NOTE: The xz file format specification is avaliable at: https://tukaani.org/xz/xz-file-format.txt
@@ -123,9 +124,10 @@ private:
 
     struct BlockState {
         CountedInputStream counted_input_stream;
+        LZMA::LZMA2InputStream lzma2_input_stream;
         NonnullOwnPtr<BlockChecksum> checksum;
 
-        BlockState(InputStream&, NonnullOwnPtr<BlockChecksum>);
+        BlockState(InputStream&, u8 lzma_properties_byte, NonnullOwnPtr<BlockChecksum>);
     };
 
     InputStream& m_input_stream;

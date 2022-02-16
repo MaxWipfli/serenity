@@ -1,6 +1,7 @@
 set(SOURCES
     Deflate.cpp
     Gzip.cpp
+    LZMA/LZMA2InputStream.cpp
     Xz.cpp
     Zlib.cpp
 )

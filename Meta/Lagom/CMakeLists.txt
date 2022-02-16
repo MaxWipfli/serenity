@@ -290,8 +290,9 @@ if (BUILD_LAGOM)
 
     # Compress
     file(GLOB LIBCOMPRESS_SOURCES CONFIGURE_DEPENDS "../../Userland/Libraries/LibCompress/*.cpp")
+    file(GLOB LIBCOMPRESS_SUBDIR_SOURCES CONFIGURE_DEPENDS "../../Userland/Libraries/LibCompress/*/*.cpp")
     lagom_lib(Compress compress
-        SOURCES ${LIBCOMPRESS_SOURCES}
+        SOURCES ${LIBCOMPRESS_SOURCES} ${LIBCOMPRESS_SUBDIR_SOURCES}
         LIBS LagomCrypto
     )
 
