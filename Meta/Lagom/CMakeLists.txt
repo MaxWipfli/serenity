@@ -516,6 +516,10 @@ if (BUILD_LAGOM)
         set_target_properties(wasm_lagom PROPERTIES OUTPUT_NAME wasm)
         target_link_libraries(wasm_lagom LagomCore LagomWasm LagomLine LagomMain)
 
+        add_executable(xz_lagom ../../Userland/Utilities/xz.cpp)
+        set_target_properties(xz_lagom PROPERTIES OUTPUT_NAME xz)
+        target_link_libraries(xz_lagom LagomCompress LagomCrypto LagomCore LagomMain)
+
         enable_testing()
         # LibTest
         file(GLOB LIBTEST_SOURCES CONFIGURE_DEPENDS "../../Userland/Libraries/LibTest/*.cpp")
