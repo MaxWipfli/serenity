@@ -6,6 +6,7 @@
 
 #include <LibCrypto/Checksum/Adler32.h>
 #include <LibCrypto/Checksum/CRC32.h>
+#include <LibCrypto/Checksum/CRC64.h>
 #include <LibTest/TestCase.h>
 
 TEST_CASE(test_adler32)
@@ -32,4 +33,16 @@ TEST_CASE(test_crc32)
     do_test(String("").bytes(), 0x0);
     do_test(String("The quick brown fox jumps over the lazy dog").bytes(), 0x414FA339);
     do_test(String("various CRC algorithms input data").bytes(), 0x9BD366AE);
+}
+
+TEST_CASE(test_crc64)
+{
+    auto do_test = [](ReadonlyBytes input, u64 expected_result) {
+        auto digest = Crypto::Checksum::CRC64(input).digest();
+        EXPECT_EQ(digest, expected_result);
+    };
+
+    do_test(String("").bytes(), 0x0);
+    do_test(String("The quick brown fox jumps over the lazy dog").bytes(), 0x5B5EB8C2E54AA1C4);
+    do_test(String("various CRC algorithms input data").bytes(), 0x15FB5F58F5D83D2D);
 }
