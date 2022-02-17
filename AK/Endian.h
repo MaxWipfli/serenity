@@ -100,6 +100,8 @@ public:
 
     constexpr operator T() const { return convert_between_host_and_little_endian(m_value); }
 
+    constexpr ReadonlyBytes bytes() const { return { &m_value, sizeof(m_value) }; }
+
 private:
     T m_value { 0 };
 };
@@ -127,6 +129,8 @@ public:
     }
 
     constexpr operator T() const { return convert_between_host_and_big_endian(m_value); }
+
+    constexpr ReadonlyBytes bytes() const { return { &m_value, sizeof(m_value) }; }
 
 private:
     T m_value { 0 };
