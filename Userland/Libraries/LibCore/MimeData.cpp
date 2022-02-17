@@ -125,6 +125,7 @@ String guess_mime_type_based_on_filename(StringView path)
     __ENUMERATE_MIME_TYPE_HEADER(wasm, "application/wasm", 0, 4, 0x00, 'a', 's', 'm')                                                            \
     __ENUMERATE_MIME_TYPE_HEADER(win_31x_archive, "extra/win-31x-compressed", 0, 4, 'K', 'W', 'A', 'J')                                          \
     __ENUMERATE_MIME_TYPE_HEADER(win_95_archive, "extra/win-95-compressed", 0, 4, 'S', 'Z', 'D', 'D')                                            \
+    __ENUMERATE_MIME_TYPE_HEADER(xz, "application/x-xz", 0, 6, 0xfd, '7', 'z', 'X', 'Z', 0x00)                                                   \
     __ENUMERATE_MIME_TYPE_HEADER(zlib_0, "extra/raw-zlib", 0, 2, 0x78, 0x01)                                                                     \
     __ENUMERATE_MIME_TYPE_HEADER(zlib_1, "extra/raw-zlib", 0, 2, 0x78, 0x5E)                                                                     \
     __ENUMERATE_MIME_TYPE_HEADER(zlib_2, "extra/raw-zlib", 0, 2, 0x78, 0x9C)                                                                     \
