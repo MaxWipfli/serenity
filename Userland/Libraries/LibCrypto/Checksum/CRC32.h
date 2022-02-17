@@ -12,10 +12,10 @@
 
 namespace Crypto::Checksum {
 
-struct Table {
+struct CRC32Table {
     u32 data[256];
 
-    constexpr Table()
+    constexpr CRC32Table()
         : data()
     {
         for (auto i = 0; i < 256; i++) {
@@ -39,9 +39,10 @@ struct Table {
     }
 };
 
-constexpr static auto table = Table();
-
 class CRC32 : public ChecksumFunction<u32> {
+private:
+    constexpr static auto table = CRC32Table();
+
 public:
     CRC32() { }
     CRC32(ReadonlyBytes data)
