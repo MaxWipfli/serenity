@@ -44,6 +44,12 @@ size_t LZMA2InputStream::read(Bytes bytes)
 
 ErrorOr<size_t> LZMA2InputStream::try_read(Bytes bytes)
 {
+    if (bytes.size() == 0)
+        return 0;
+    // FIXME: This is a quick hack to get everything to compile. Maybe create the lzma_decoder on construction.
+    if (!m_lzma_decoder.has_value())
+        m_lzma_decoder = TRY(LZMADecoder::create(m_input_stream, m_dict_size));
+
     size_t total_read = 0;
     while (total_read < bytes.size()) {
         if (has_any_error() || m_state == State::EndOfFile)
@@ -62,7 +68,7 @@ ErrorOr<size_t> LZMA2InputStream::try_read(Bytes bytes)
                 break;
             } else if (packet_control_byte == 0x01) {
                 // Dictionary reset followed by an uncompressed chunk.
-                // FIXME: Reset dictionary.
+                m_lzma_decoder->reset_dict();
                 m_state = State::UncompressedBlock;
             } else if (packet_control_byte == 0x02) {
                 // Uncompressed chunk without a dictionary reset.
@@ -131,13 +137,13 @@ ErrorOr<size_t> LZMA2InputStream::try_read(Bytes bytes)
 
             u8 reset_bits = (*m_lzma_chunk_control_byte >> 5) & 0x03;
             if (reset_bits >= 1) {
-                // FIXME: Reset state.
+                m_lzma_decoder->reset_state();
             }
             if (reset_bits >= 2) {
-                // FIXME: Set lclppb properties byte.
+                TRY(m_lzma_decoder->set_lclppb_properties(properties_byte));
             }
             if (reset_bits == 3) {
-                // FIXME: Reset dictionary.
+                m_lzma_decoder->reset_dict();
             }
 
             TODO();

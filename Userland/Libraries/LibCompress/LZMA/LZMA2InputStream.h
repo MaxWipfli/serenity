@@ -7,6 +7,7 @@
 #pragma once
 
 #include <AK/Stream.h>
+#include <LibCompress/LZMA/LZMADecoder.h>
 
 namespace Compress::LZMA {
 
@@ -41,6 +42,8 @@ private:
     Optional<u8> m_lzma_chunk_control_byte;
     Optional<u16> m_compressed_data_size;
     Optional<u32> m_uncompressed_data_size;
+
+    Optional<LZMADecoder> m_lzma_decoder;
 
     u32 m_dict_size { 0 };
 };
