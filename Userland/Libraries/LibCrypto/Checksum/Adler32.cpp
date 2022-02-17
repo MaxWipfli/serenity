@@ -18,7 +18,7 @@ void Adler32::update(ReadonlyBytes data)
     }
 };
 
-u32 Adler32::digest()
+u32 Adler32::digest() const
 {
     return (m_state_b << 16) | m_state_a;
 }

@@ -28,7 +28,7 @@ public:
     }
 
     virtual void update(ReadonlyBytes data) override;
-    virtual u32 digest() override;
+    virtual u32 digest() const override;
 
 private:
     u32 m_state_a { 1 };

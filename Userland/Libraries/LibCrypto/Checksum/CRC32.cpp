@@ -17,7 +17,7 @@ void CRC32::update(ReadonlyBytes data)
     }
 };
 
-u32 CRC32::digest()
+u32 CRC32::digest() const
 {
     return ~m_state;
 }
